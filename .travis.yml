@@ -1,0 +1,6 @@
+language: java
+jdk:
+  - oraclejdk8
+  - oraclejdk7
+sudo: false
+script: mvn clean verify integration-test
