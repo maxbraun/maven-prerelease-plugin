@@ -54,7 +54,7 @@ public class Descriptor {
         InputStream src;
 
         properties = new Properties();
-        src = file(target).createInputStream();
+        src = file(target).newInputStream();
         properties.load(src);
         return new Descriptor(get(properties, PRERELEASE), target.getRevision(), get(properties, SVN_ORIG), get(properties, SVN_TAG),
                 new Project(get(properties, PROJECT_GROUP_ID), get(properties, PROJECT_ARTIFACT_ID), get(properties, PROJECT_VERSION)),
@@ -182,7 +182,7 @@ public class Descriptor {
         for (Map.Entry<String, String> entry : deployProperties.entrySet()) {
             properties.setProperty(DEPLOY_PROPERTIES + entry.getKey(), entry.getValue());
         }
-        dest = file(target).createOutputStream(false);
+        dest = file(target).newOutputStream(false);
         properties.store(dest, "");
         dest.close();
     }

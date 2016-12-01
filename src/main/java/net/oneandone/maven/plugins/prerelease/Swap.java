@@ -35,7 +35,7 @@ public class Swap extends Base {
     public void doExecute() throws Exception {
         Set<String> relatives;
         List<FileNode> storages;
-        List<Node> archives;
+        List<FileNode> archives;
         Archive archive;
         FileNode dest;
         FileNode storage;

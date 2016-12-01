@@ -54,7 +54,7 @@ import java.util.List;
 import static org.junit.Assert.fail;
 
 public class IntegrationBase {
-    public static final World WORLD = new World();
+    public static final World WORLD = World.createMinimal();
 
     public static final FileNode PROJECT_HOME = WORLD.guessProjectHome(IntegrationBase.class);
     public static final FileNode TARGET = PROJECT_HOME.join("target");
@@ -146,7 +146,7 @@ public class IntegrationBase {
     protected static void append(FileNode fileToChange, String message) throws IOException {
         Writer dest;
 
-        dest = fileToChange.createAppender();
+        dest = fileToChange.newAppender();
         dest.write(message);
         dest.close();
     }
@@ -243,7 +243,7 @@ public class IntegrationBase {
                 new ArtifactRepositoryPolicy(false, ArtifactRepositoryPolicy.UPDATE_POLICY_NEVER, ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN)
         );
         localDir = defaultLocalRepositoryDir(world);
-        local = factory.createArtifactRepository("local", localDir.getURI().toASCIIString(),
+        local = factory.createArtifactRepository("local", localDir.getUri().toASCIIString(),
                 new DefaultRepositoryLayout(),
                 new ArtifactRepositoryPolicy(true, ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS, ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN),
                 new ArtifactRepositoryPolicy(true, ArtifactRepositoryPolicy.UPDATE_POLICY_NEVER, ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN));

@@ -162,7 +162,7 @@ public class Archive implements AutoCloseable {
                 file.getParent().mkdirsOpt();
                 try {
                     file.mkfile();
-                    OnShutdown.get().deleteAtExit(file);
+                    file.getWorld().onShutdown().deleteAtExit(file);
                     opened = true;
                     file.writeString(Integer.toString(pid()));
                     if (log != null) {
@@ -207,7 +207,7 @@ public class Archive implements AutoCloseable {
         file.deleteFile();
         // because another thread waiting for this lock might create this file again.
         // The shutdown hook must not delete the file created by this other thread.
-        OnShutdown.get().dontDeleteAtExit(file);
+        file.getWorld().onShutdown().dontDeleteAtExit(file);
         closed = true;
     }
 

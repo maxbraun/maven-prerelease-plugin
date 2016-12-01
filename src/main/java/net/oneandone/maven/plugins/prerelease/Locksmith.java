@@ -64,7 +64,7 @@ public class Locksmith extends Base {
         String pid;
         Long time;
         int errors;
-        List<Node> locks;
+        List<FileNode> locks;
 
         started = startedMap();
         errors = 0;

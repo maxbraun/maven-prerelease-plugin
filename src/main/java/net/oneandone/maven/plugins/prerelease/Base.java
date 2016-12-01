@@ -96,7 +96,7 @@ public abstract class Base extends AbstractMojo {
     protected Subversion.SvnCredentials svnCredentials;
 
     public Base() {
-        this.world = new World();
+        this.world = World.createMinimal();
     }
 
     @Override

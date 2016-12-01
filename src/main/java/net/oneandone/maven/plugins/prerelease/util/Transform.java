@@ -83,7 +83,7 @@ public final class Transform {
         ls = (DOMImplementationLS) document.getImplementation().getFeature("LS", "3.0");
         serializer = ls.createLSSerializer();
         output = ls.createLSOutput();
-        stream = file.createOutputStream();
+        stream = file.newOutputStream();
         output.setByteStream(stream);
         serializer.write(document, output);
         stream.write('\n');
