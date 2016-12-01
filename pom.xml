@@ -17,10 +17,10 @@
     for continuous delivery</description>
   <url>https://github.com/mlhartme/maven-application-plugin</url>
   <properties>
-    <mavenVersion>3.1.1</mavenVersion>
+    <mavenVersion>3.3.9</mavenVersion>
     <wsd.ypid>20236</wsd.ypid>
-    <oneandone.java.source>1.7</oneandone.java.source>
-    <oneandone.java.target>1.7</oneandone.java.target>
+    <oneandone.java.source>1.8</oneandone.java.source>
+    <oneandone.java.target>1.8</oneandone.java.target>
 
     <!-- TODO ... dependency convergence -->
     <enforcer.skip>true</enforcer.skip>
