@@ -1,3 +1,4 @@
+![Build Status @ Travis](https://api.travis-ci.org/maxbraun/maven-prerelease-plugin.svg)
 # Maven Prerelease Plugin
 
 ## Overview
@@ -56,4 +57,3 @@ The plugin invokes `svn` command-line tools, you need it in your path.
 If you keep your Jenkins jobs and your .m2 directory in a ram disk, all prereleases will also end up in this ram disk (because the default location is "${settings.localRepository}/../prereleases"). This consumes quite a lot of disk space, especially if you keep more than 1 prerelease.
 
 With "-Dprerelease.storages=/path/to/ramdisk/prereleases,/path/to/harddisk/prereleases" you can define a primary and secondary storage for prereleases. Define this property for whenever you invoke the prerelease plugin on Jenkins. New prereleases are created in primary storage. Later, as a separate job in your Jenkins, you run "prerelease:swap". This will move all prereleases to secondary storage. This will slightly slow down releases when the reprerelease is loaded from hard disk. But if there is not prerelease yet, it's as fast as before, because the new prerelease starts life on the ram disk.
-
