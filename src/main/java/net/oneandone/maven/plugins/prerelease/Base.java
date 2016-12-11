@@ -89,7 +89,7 @@ public abstract class Base extends AbstractMojo {
     private String svnPassword;
 
 
-    @Component
+    @Parameter( defaultValue = "${session}", readonly = true )
     protected MavenSession session;
 
     protected final World world;
