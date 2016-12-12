@@ -44,21 +44,21 @@ import org.apache.maven.plugins.annotations.Parameter;
 @Mojo(name = "promote")
 public class Promote extends ProjectBase {
     /**
-     * Message for svn prepareCommit of the new tag.
+     * Message for svn ccommit of the new tag.
      */
     @Parameter(property = "prerelease.createTagMessage", defaultValue =
             "Prerelease ${revision} promoted to release ${release}.")
     protected String createTagMessage;
 
     /**
-     * Svn prepareCommit message when reverting the tag.
+     * Svn ccommit message when reverting the tag.
      */
     @Parameter(property = "prerelease.revertTagMessage", defaultValue =
             "Reverting tag for release ${release} because the deployment failed.")
     protected String revertTagMessage;
 
     /**
-     * Message for svn prepareCommit to start new development iteration.
+     * Message for svn ccommit to start new development iteration.
      */
     @Parameter(property = "prerelease.nextIterationMessage", defaultValue =
             "Prerelease ${revision} promoted to release ${release}, starting next development iteration.")

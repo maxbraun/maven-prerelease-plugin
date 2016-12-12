@@ -220,7 +220,7 @@ public class Prerelease {
         }
     }
 
-    /** prepareCommit before deploy - because if deployment fails, we can reliably revert the prepareCommit. */
+    /** commit before deploy - because if deployment fails, we can reliably revert the commit. */
     private void promoteLocked(Log log, Map<String, String> propertyArgs, String commitTagMessage, String revertTagMessage, String commitNextMessage,
             FileNode origCommit, Maven maven) throws Exception {
         FileNode installed;
