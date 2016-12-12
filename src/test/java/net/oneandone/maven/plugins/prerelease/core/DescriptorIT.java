@@ -26,7 +26,6 @@ import org.junit.Test;
 
 import net.oneandone.maven.plugins.prerelease.util.IntegrationBase;
 import net.oneandone.maven.plugins.prerelease.util.Maven;
-import net.oneandone.maven.plugins.prerelease.util.Subversion;
 import net.oneandone.sushi.fs.file.FileNode;
 
 public class DescriptorIT extends IntegrationBase {
