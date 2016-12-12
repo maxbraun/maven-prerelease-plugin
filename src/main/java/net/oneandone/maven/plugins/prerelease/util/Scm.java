@@ -21,7 +21,7 @@ public abstract class Scm {
             throw new IllegalArgumentException("No Scm connection configured");
         }
         if (mavenProject.getScm().getConnection().startsWith("scm:svn:")) {
-            return new SubversionScm(credentials);
+            return new Subversion(credentials);
         }
         throw new IllegalArgumentException("cannot handle scm at " + mavenProject.getScm().getConnection());
     }

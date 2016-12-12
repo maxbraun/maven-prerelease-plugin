@@ -18,10 +18,10 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SubversionScm extends Scm {
+public class Subversion extends Scm {
     private static final Pattern PATTERN = Pattern.compile("^URL:(.*)$", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
 
-    public SubversionScm(Credentials credentials) {
+    public Subversion(Credentials credentials) {
         super(credentials);
     }
 
