@@ -124,7 +124,7 @@ public class IntegrationBase {
 
     protected static void svnCommit(FileNode workingDirectory, String message) throws Failure {
         ArrayList<String> parameters = new ArrayList<>();
-        parameters.add("prepareCommit");
+        parameters.add("commit");
         parameters.add("-m");
         parameters.add("'" + message + "'");
         svn(workingDirectory, parameters);
