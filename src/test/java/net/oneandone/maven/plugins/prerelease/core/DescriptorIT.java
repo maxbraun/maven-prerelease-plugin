@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.net.URI;
 
+import net.oneandone.maven.plugins.prerelease.util.Scm;
 import org.apache.maven.project.MavenProject;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -36,12 +37,14 @@ public class DescriptorIT extends IntegrationBase {
         MavenProject project;
         long revision;
         Descriptor descriptor;
+        Scm scm;
 
         dir = checkoutProject("minimal");
         maven = maven(WORLD);
         project = maven.loadPom(dir.join("pom.xml"));
-        revision = WorkingCopy.load(dir, Subversion.SvnCredentials.NONE()).revision();
-        descriptor = Descriptor.checkedCreate(WORLD, "foo", project, revision, false, true, Subversion.SvnCredentials.NONE());
+        scm = Scm.create(project, Scm.Credentials.NONE());
+        revision = scm.createWorkingCopy(dir).revision();
+        descriptor = Descriptor.checkedCreate(WORLD, "foo", project, revision, false, true, scm);
         assertEquals(revision, descriptor.revision);
         assertEquals("1.0.0-SNAPSHOT", descriptor.previous);
         assertEquals("minimal", descriptor.project.artifactId);
@@ -59,16 +62,18 @@ public class DescriptorIT extends IntegrationBase {
         MavenProject project;
         long revision;
         URI tag;
+        Scm scm;
 
         dir = checkoutProject("minimal");
         maven = maven(WORLD);
         project = maven.loadPom(dir.join("pom.xml"));
-        revision = WorkingCopy.load(dir, Subversion.SvnCredentials.NONE()).revision();
-        Descriptor.checkedCreate(WORLD, "foo", project, revision, false, true, Subversion.SvnCredentials.NONE());
+        scm = Scm.create(project, Scm.Credentials.NONE());
+        revision = scm.createWorkingCopy(dir).revision();
+        Descriptor.checkedCreate(WORLD, "foo", project, revision, false, true, scm);
         tag = new URI(REPOSITORY_URL + "/minimal/tags/minimal-1.0.0");
         svnMkdir(tag);
         try {
-            Descriptor.checkedCreate(WORLD, "foo", project, revision, false, true, Subversion.SvnCredentials.NONE());
+            Descriptor.checkedCreate(WORLD, "foo", project, revision, false, true, scm);
         } finally {
             svnRemove(tag);
         }
@@ -81,12 +86,14 @@ public class DescriptorIT extends IntegrationBase {
         Maven maven;
         MavenProject project;
         long revision;
+        Scm scm;
 
         dir = checkoutProject("parentSnapshot");
         maven = maven(WORLD);
         project = maven.loadPom(dir.join("pom.xml"));
-        revision = WorkingCopy.load(dir, Subversion.SvnCredentials.NONE()).revision();
-        Descriptor.checkedCreate(WORLD, "foo", project, revision, false, true, Subversion.SvnCredentials.NONE());
+        scm = Scm.create(project, Scm.Credentials.NONE());
+        revision = scm.createWorkingCopy(dir).revision();
+        Descriptor.checkedCreate(WORLD, "foo", project, revision, false, true, scm);
     }
 
     @Test(expected = VersioningProblem.class)
@@ -95,12 +102,14 @@ public class DescriptorIT extends IntegrationBase {
         Maven maven;
         MavenProject project;
         long revision;
+        Scm scm;
 
         dir = checkoutProject("dependencySnapshot");
         maven = maven(WORLD);
         project = maven.loadPom(dir.join("pom.xml"));
-        revision = WorkingCopy.load(dir, Subversion.SvnCredentials.NONE()).revision();
-        Descriptor.checkedCreate(WORLD, "foo", project, revision, false, true, Subversion.SvnCredentials.NONE());
+        scm = Scm.create(project, Scm.Credentials.NONE());
+        revision = scm.createWorkingCopy(dir).revision();
+        Descriptor.checkedCreate(WORLD, "foo", project, revision, false, true, scm);
     }
 
     @Test(expected = VersioningProblem.class)
@@ -109,11 +118,13 @@ public class DescriptorIT extends IntegrationBase {
         Maven maven;
         MavenProject project;
         long revision;
+        Scm scm;
 
         dir = checkoutProject("pluginSnapshot");
         maven = maven(WORLD);
         project = maven.loadPom(dir.join("pom.xml"));
-        revision = WorkingCopy.load(dir, Subversion.SvnCredentials.NONE()).revision();
-        Descriptor.checkedCreate(WORLD, "foo", project, revision, false, true, Subversion.SvnCredentials.NONE());
+        scm = Scm.create(project, Scm.Credentials.NONE());
+        revision = scm.createWorkingCopy(dir).revision();
+        Descriptor.checkedCreate(WORLD, "foo", project, revision, false, true, scm);
     }
 }

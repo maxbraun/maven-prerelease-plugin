@@ -29,8 +29,8 @@ public class MojoIT extends IntegrationBase {
         checkout = checkoutProject("minimal");
         mvn(checkout, PREFIX + "list");
         mvn(checkout, PREFIX + "create");
-        mvn(checkout, PREFIX + "update");
-        mvn(checkout, PREFIX + "update");
+        mvn(checkout, PREFIX + "prepareUpdate");
+        mvn(checkout, PREFIX + "prepareUpdate");
         mvn(checkout, PREFIX + "promote");
     }
 }

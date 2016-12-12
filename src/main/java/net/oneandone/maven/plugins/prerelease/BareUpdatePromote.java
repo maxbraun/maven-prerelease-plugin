@@ -18,14 +18,13 @@ package net.oneandone.maven.plugins.prerelease;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Perform update-promote without a working copy. Svn url and revision are passed as arguments, not determined from a working copy.
+ * Perform prepareUpdate-promote without a working copy. Svn url and revision are passed as arguments, not determined from a working copy.
  */
-@Mojo(name = "bare-update-promote", requiresProject = false)
+@Mojo(name = "bare-prepareUpdate-promote", requiresProject = false)
 public class BareUpdatePromote extends BareBase {
     /**
      * Passed to the promote goal when specified.
@@ -46,7 +45,7 @@ public class BareUpdatePromote extends BareBase {
     protected String nextIterationMessage;
 
     public BareUpdatePromote() {
-        super("update-promote");
+        super("prepareUpdate-promote");
     }
 
     @Override

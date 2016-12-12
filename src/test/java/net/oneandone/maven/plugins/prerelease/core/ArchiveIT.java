@@ -41,7 +41,7 @@ public class ArchiveIT extends IntegrationBase {
         } catch (OutOfMemoryError e) {
             // ok
         }
-        // make sure the lock was removed
+        // make sure the prepareLock was removed
         Archive.open(Collections.singletonList(tmp), 1, nullLog()).close();
     }
 

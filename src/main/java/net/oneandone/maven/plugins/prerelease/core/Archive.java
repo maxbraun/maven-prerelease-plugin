@@ -15,26 +15,24 @@
  */
 package net.oneandone.maven.plugins.prerelease.core;
 
+import net.oneandone.maven.plugins.prerelease.util.ChangesXml;
+import net.oneandone.maven.plugins.prerelease.util.Scm;
+import net.oneandone.sushi.fs.DirectoryNotFoundException;
+import net.oneandone.sushi.fs.FileNotFoundException;
+import net.oneandone.sushi.fs.ListException;
+import net.oneandone.sushi.fs.MkfileException;
+import net.oneandone.sushi.fs.file.FileNode;
+import net.oneandone.sushi.xml.XmlException;
+import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.project.MavenProject;
+import org.xml.sax.SAXException;
+
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
-
-import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.project.MavenProject;
-import org.xml.sax.SAXException;
-
-import net.oneandone.maven.plugins.prerelease.util.ChangesXml;
-import net.oneandone.maven.plugins.prerelease.util.Subversion;
-import net.oneandone.sushi.fs.DirectoryNotFoundException;
-import net.oneandone.sushi.fs.FileNotFoundException;
-import net.oneandone.sushi.fs.ListException;
-import net.oneandone.sushi.fs.MkfileException;
-import net.oneandone.sushi.fs.OnShutdown;
-import net.oneandone.sushi.fs.file.FileNode;
-import net.oneandone.sushi.xml.XmlException;
 
 /**
  * The archive stores prereleases for one given groupId/artifactId.
@@ -97,7 +95,7 @@ public class Archive implements AutoCloseable {
         this.directories = directories;
     }
 
-    public Target target(long revision, Subversion.SvnCredentials svnCredentials) {
+    public Target target(long revision, Scm scm) {
         String name;
         FileNode prerelease;
 
@@ -105,7 +103,7 @@ public class Archive implements AutoCloseable {
         for (int i = directories.size() - 1; i >= 0; i--) {
             prerelease = directories.get(i).join(name);
             if (i == 0 || prerelease.exists()) {
-                return new Target(prerelease, revision, svnCredentials);
+                return new Target(prerelease, revision, scm);
             }
         }
         throw new IllegalStateException();
@@ -205,7 +203,7 @@ public class Archive implements AutoCloseable {
         }
         file = lockFile();
         file.deleteFile();
-        // because another thread waiting for this lock might create this file again.
+        // because another thread waiting for this prepareLock might create this file again.
         // The shutdown hook must not delete the file created by this other thread.
         file.getWorld().onShutdown().dontDeleteAtExit(file);
         closed = true;

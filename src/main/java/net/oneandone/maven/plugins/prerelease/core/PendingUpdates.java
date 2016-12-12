@@ -26,7 +26,7 @@ public class PendingUpdates extends Exception {
 
     public PendingUpdates(long revision, List<String> updates) {
         super("pending updates for revision " + revision + ":\n"
-                + Strings.indent(Separator.RAW_LINE.join(updates), "  ") + "\nRun svn update.");
+                + Strings.indent(Separator.RAW_LINE.join(updates), "  ") + "\nRun svn prepareUpdate.");
         this.revision = revision;
         this.updates = updates;
     }

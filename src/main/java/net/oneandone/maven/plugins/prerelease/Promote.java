@@ -15,13 +15,12 @@
  */
 package net.oneandone.maven.plugins.prerelease;
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-
 import net.oneandone.maven.plugins.prerelease.core.Archive;
 import net.oneandone.maven.plugins.prerelease.core.Prerelease;
 import net.oneandone.maven.plugins.prerelease.core.WorkingCopy;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 /**
  * Promotes a prerelease by commiting the tag and deploying its artifact(s).
@@ -45,21 +44,21 @@ import net.oneandone.maven.plugins.prerelease.core.WorkingCopy;
 @Mojo(name = "promote")
 public class Promote extends ProjectBase {
     /**
-     * Message for svn commit of the new tag.
+     * Message for svn prepareCommit of the new tag.
      */
     @Parameter(property = "prerelease.createTagMessage", defaultValue =
             "Prerelease ${revision} promoted to release ${release}.")
     protected String createTagMessage;
 
     /**
-     * Svn commit message when reverting the tag.
+     * Svn prepareCommit message when reverting the tag.
      */
     @Parameter(property = "prerelease.revertTagMessage", defaultValue =
             "Reverting tag for release ${release} because the deployment failed.")
     protected String revertTagMessage;
 
     /**
-     * Message for svn commit to start new development iteration.
+     * Message for svn prepareCommit to start new development iteration.
      */
     @Parameter(property = "prerelease.nextIterationMessage", defaultValue =
             "Prerelease ${revision} promoted to release ${release}, starting next development iteration.")
@@ -72,7 +71,7 @@ public class Promote extends ProjectBase {
 
         workingCopy = checkedWorkingCopy();
         revision = workingCopy.revision();
-        setTarget(archive.target(revision, svnCredentials));
+        setTarget(archive.target(revision, scm));
         prerelease = target.loadOpt();
         if (prerelease == null) {
             throw new MojoExecutionException("no prerelease for revision " + revision);

@@ -15,7 +15,6 @@
  */
 package net.oneandone.maven.plugins.prerelease;
 
-import net.oneandone.sushi.fs.FileNotFoundException;
 import net.oneandone.sushi.fs.Node;
 import net.oneandone.sushi.fs.file.FileNode;
 import net.oneandone.sushi.io.OS;
@@ -27,18 +26,14 @@ import org.apache.maven.plugins.annotations.Parameter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Find an delete stale locks. JVM crashes or kill -9 does not properly cleanup locks. This goals repairs them by looking for locks
  * from processes that no longer exists.
  *
  * Note that this locking cleanup should run in a single, separate process to avoid running into its own locking problems. It
- * must not be included in the lock file creating itself because there are multiple processes involved.
+ * must not be included in the prepareLock file creating itself because there are multiple processes involved.
  */
 @Mojo(name = "locksmith", requiresProject = false)
 public class Locksmith extends Base {
@@ -80,18 +75,18 @@ public class Locksmith extends Base {
                 if (file.isFile()) {
                     throw e;
                 } else {
-                    // lock has already been removed, probably by a concurrent build that finished
+                    // prepareLock has already been removed, probably by a concurrent build that finished
                     continue;
                 }
             }
             if (pid.trim().isEmpty()) {
-                throw new IOException(file + ": old lock file format");
+                throw new IOException(file + ": old prepareLock file format");
             }
             time = started.get(pid);
             if (time == null) {
-                getLog().info(file + ": stale lock - no process with id " + pid);
+                getLog().info(file + ": stale prepareLock - no process with id " + pid);
             } else if (file.getLastModified() < time) {
-                getLog().info(file + ": stale lock - process with id " + pid + " younger than lock file");
+                getLog().info(file + ": stale prepareLock - process with id " + pid + " younger than prepareLock file");
             } else {
                 getLog().debug(file + " ok");
                 continue;

@@ -15,18 +15,17 @@
  */
 package net.oneandone.maven.plugins.prerelease;
 
-import org.apache.maven.plugins.annotations.Mojo;
-
 import net.oneandone.maven.plugins.prerelease.core.Archive;
 import net.oneandone.maven.plugins.prerelease.core.Descriptor;
 import net.oneandone.maven.plugins.prerelease.core.Prerelease;
 import net.oneandone.maven.plugins.prerelease.core.WorkingCopy;
 import net.oneandone.maven.plugins.prerelease.util.Maven;
+import org.apache.maven.plugins.annotations.Mojo;
 
 /**
  * Checks if there is a prerelease for the last change in your svn working directory; creates one if not.
  */
-@Mojo(name = "update")
+@Mojo(name = "prepareUpdate")
 public class Update extends ProjectBase {
     @Override
     public void doExecute(Archive archive) throws Exception {
@@ -40,9 +39,9 @@ public class Update extends ProjectBase {
         workingCopy = checkedWorkingCopy();
         getLog().info("checking project ...");
         revision = workingCopy.revision();
-        descriptor = Descriptor.create(version(), project, revision, svnCredentials);
+        descriptor = Descriptor.create(version(), project, revision, scm.credentials());
         workingCopy.checkCompatibility(descriptor);
-        setTarget(archive.target(revision, svnCredentials));
+        setTarget(archive.target(revision, scm));
         if (target.exists()) {
             getLog().info("prerelease already exists: " + descriptor.getName());
         } else {

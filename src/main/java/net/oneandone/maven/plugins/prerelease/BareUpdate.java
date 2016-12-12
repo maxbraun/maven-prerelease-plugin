@@ -18,11 +18,11 @@ package net.oneandone.maven.plugins.prerelease;
 import org.apache.maven.plugins.annotations.Mojo;
 
 /**
- * Perform update without a working copy. Svn url and revision are passed as arguments, not determined from a working copy.
+ * Perform prepareUpdate without a working copy. Svn url and revision are passed as arguments, not determined from a working copy.
  */
-@Mojo(name = "bare-update", requiresProject = false)
+@Mojo(name = "bare-prepareUpdate", requiresProject = false)
 public class BareUpdate extends BareBase {
     public BareUpdate() {
-        super("update");
+        super("prepareUpdate");
     }
 }

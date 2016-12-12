@@ -29,6 +29,7 @@ import org.apache.maven.execution.DefaultMavenExecutionRequest;
 import org.apache.maven.execution.DefaultMavenExecutionResult;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.monitor.logging.DefaultLog;
+import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuilder;
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.codehaus.plexus.DefaultContainerConfiguration;
@@ -59,7 +60,9 @@ public class IntegrationBase {
     public static final FileNode PROJECT_HOME = WORLD.guessProjectHome(IntegrationBase.class);
     public static final FileNode TARGET = PROJECT_HOME.join("target");
 
+
     private static final String SVN = "svn";
+
 
     public static void svn(FileNode workingDirectory, List<String> parameters) throws Failure {
         svn(workingDirectory, SVN, parameters);
@@ -121,7 +124,7 @@ public class IntegrationBase {
 
     protected static void svnCommit(FileNode workingDirectory, String message) throws Failure {
         ArrayList<String> parameters = new ArrayList<>();
-        parameters.add("commit");
+        parameters.add("prepareCommit");
         parameters.add("-m");
         parameters.add("'" + message + "'");
         svn(workingDirectory, parameters);

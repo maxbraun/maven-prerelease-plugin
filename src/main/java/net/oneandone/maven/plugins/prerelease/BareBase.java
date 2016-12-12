@@ -15,18 +15,16 @@
  */
 package net.oneandone.maven.plugins.prerelease;
 
+import net.oneandone.maven.plugins.prerelease.util.FilteringMojoExecutor;
+import net.oneandone.maven.plugins.prerelease.util.Maven;
+import net.oneandone.sushi.fs.file.FileNode;
+import org.apache.maven.plugins.annotations.Parameter;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.maven.plugins.annotations.Parameter;
-
-import net.oneandone.maven.plugins.prerelease.util.FilteringMojoExecutor;
-import net.oneandone.maven.plugins.prerelease.util.Maven;
-import net.oneandone.maven.plugins.prerelease.util.Subversion;
-import net.oneandone.sushi.fs.file.FileNode;
-
 /**
- * Perform update-promote without a working copy. Svn url and revision are passed as arguments, not determined from a working copy.
+ * Perform prepareUpdate-promote without a working copy. Svn url and revision are passed as arguments, not determined from a working copy.
  */
 public abstract class BareBase extends Base {
     public static final String LASTEST_PRERELEASE = "LATEST_PRERELEASE";
@@ -40,7 +38,7 @@ public abstract class BareBase extends Base {
     }
 
     /**
-     * Svn URL to be update-promoted.
+     * Svn URL to be prepareUpdate-promoted.
      */
     @Parameter(property = "prerelease.svnurl", required = true)
     private String svnurl;
@@ -82,8 +80,8 @@ public abstract class BareBase extends Base {
     private FileNode tempCheckout() throws Exception {
         FileNode result;
 
-        result = ((FileNode) world.getWorking()).createTempDirectory();
-        Subversion.sparseCheckout(getLog(), result, svnurl, revisionForPomLoading(), false, svnCredentials);
+        result = world.getWorking().createTempDirectory();
+        scm.sparseCheckout(getLog(), result, svnurl, revisionForPomLoading(), false);
         return result;
     }
 

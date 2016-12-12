@@ -18,11 +18,7 @@ package net.oneandone.maven.plugins.prerelease.util;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.DefaultLifecycles;
 import org.apache.maven.lifecycle.LifecycleExecutionException;
-import org.apache.maven.lifecycle.internal.DependencyContext;
-import org.apache.maven.lifecycle.internal.LifecycleModuleBuilder;
-import org.apache.maven.lifecycle.internal.MojoExecutor;
-import org.apache.maven.lifecycle.internal.PhaseRecorder;
-import org.apache.maven.lifecycle.internal.ProjectIndex;
+import org.apache.maven.lifecycle.internal.*;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.plugin.descriptor.MojoDescriptor;
 import org.apache.maven.project.MavenProject;
@@ -30,7 +26,6 @@ import org.codehaus.plexus.PlexusContainer;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 

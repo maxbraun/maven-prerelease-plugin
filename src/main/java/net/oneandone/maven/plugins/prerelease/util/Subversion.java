@@ -15,14 +15,13 @@
  */
 package net.oneandone.maven.plugins.prerelease.util;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.maven.plugin.logging.Log;
-
 import net.oneandone.sushi.fs.file.FileNode;
 import net.oneandone.sushi.launcher.Failure;
 import net.oneandone.sushi.launcher.Launcher;
+import org.apache.maven.plugin.logging.Log;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class Subversion {
     public static Launcher launcher(FileNode dir, SvnCredentials credentials,  String ... args) {

@@ -15,17 +15,16 @@
  */
 package net.oneandone.maven.plugins.prerelease;
 
-import org.apache.maven.plugins.annotations.Mojo;
-
 import net.oneandone.maven.plugins.prerelease.core.Archive;
 import net.oneandone.maven.plugins.prerelease.core.Prerelease;
 import net.oneandone.maven.plugins.prerelease.core.WorkingCopy;
 import net.oneandone.maven.plugins.prerelease.util.Maven;
+import org.apache.maven.plugins.annotations.Mojo;
 
 /**
  * Updates and promotes a prerelease. Convenience goal.
  */
-@Mojo(name = "update-promote")
+@Mojo(name = "prepareUpdate-promote")
 public class UpdatePromote extends Promote {
     public void doExecute(Archive archive) throws Exception {
         WorkingCopy workingCopy;
@@ -33,7 +32,7 @@ public class UpdatePromote extends Promote {
         Maven maven;
 
         workingCopy = checkedWorkingCopy();
-        setTarget(archive.target(workingCopy.revision(), svnCredentials));
+        setTarget(archive.target(workingCopy.revision(), scm));
         prerelease = target.loadOpt();
         if (prerelease == null) {
             maven = maven();

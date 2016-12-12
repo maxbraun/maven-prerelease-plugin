@@ -15,14 +15,13 @@
  */
 package net.oneandone.maven.plugins.prerelease;
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Mojo;
-
 import net.oneandone.maven.plugins.prerelease.core.Archive;
 import net.oneandone.maven.plugins.prerelease.core.Descriptor;
 import net.oneandone.maven.plugins.prerelease.core.Prerelease;
 import net.oneandone.maven.plugins.prerelease.core.WorkingCopy;
 import net.oneandone.maven.plugins.prerelease.util.Maven;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Mojo;
 
 /**
  * Creates a prerelease with an uncommitted tag and undeployed artifacts. Creating a prerelease is the first step to create a release;
@@ -53,7 +52,7 @@ public class Create extends ProjectBase {
         Maven maven;
 
         workingCopy = checkedWorkingCopy();
-        setTarget(archive.target(workingCopy.revision(), svnCredentials));
+        setTarget(archive.target(workingCopy.revision(), scm));
         if (target.exists()) {
             throw new MojoExecutionException("prerelease already exists: " + workingCopy.revision());
         }

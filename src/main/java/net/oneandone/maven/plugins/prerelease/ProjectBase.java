@@ -15,19 +15,15 @@
  */
 package net.oneandone.maven.plugins.prerelease;
 
-import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.MavenProject;
-
 import net.oneandone.maven.plugins.prerelease.core.Archive;
 import net.oneandone.maven.plugins.prerelease.core.Descriptor;
 import net.oneandone.maven.plugins.prerelease.core.Target;
 import net.oneandone.maven.plugins.prerelease.core.WorkingCopy;
 import net.oneandone.sushi.fs.file.FileNode;
+import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugins.annotations.Parameter;
 
 public abstract class ProjectBase extends Base {
-    @Parameter(property = "project", required = true, readonly = true)
-    protected MavenProject project;
 
     /** Set to true to deploy snapshots for every successfully built prerelease */
     @Parameter(property = "prerelease.snapshots", defaultValue = "false")
@@ -93,7 +89,7 @@ public abstract class ProjectBase extends Base {
 
         log = getLog();
         log.info("checking working copy ...");
-        workingCopy = WorkingCopy.load(basedir(), svnCredentials);
+        workingCopy = scm.createWorkingCopy(basedir());
         if (log.isDebugEnabled()) {
             log.debug("revisions: " + workingCopy.revisions);
             log.debug("changes: " + workingCopy.changes);
@@ -108,7 +104,7 @@ public abstract class ProjectBase extends Base {
 
         getLog().info("checking project ...");
         revision = workingCopy.revision();
-        descriptor = Descriptor.checkedCreate(world, version(), project, revision, allowSnapshots, allowPrereleaseSnapshots, svnCredentials);
+        descriptor = Descriptor.checkedCreate(world, version(), project, revision, allowSnapshots, allowPrereleaseSnapshots, scm);
         workingCopy.checkCompatibility(descriptor);
         return descriptor;
     }

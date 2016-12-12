@@ -15,27 +15,27 @@
  */
 package net.oneandone.maven.plugins.prerelease;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import net.oneandone.maven.plugins.prerelease.util.Maven;
+import net.oneandone.maven.plugins.prerelease.util.Scm;
+import net.oneandone.sushi.fs.World;
+import net.oneandone.sushi.fs.file.FileNode;
+import net.oneandone.sushi.util.Separator;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 import org.apache.maven.project.ProjectBuilder;
 
-import net.oneandone.maven.plugins.prerelease.util.Maven;
-import net.oneandone.maven.plugins.prerelease.util.Subversion;
-import net.oneandone.sushi.fs.World;
-import net.oneandone.sushi.fs.file.FileNode;
-import net.oneandone.sushi.util.Separator;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class Base extends AbstractMojo {
     /**
@@ -92,8 +92,12 @@ public abstract class Base extends AbstractMojo {
     @Parameter( defaultValue = "${session}", readonly = true )
     protected MavenSession session;
 
+    @Parameter(property = "project", required = true, readonly = true)
+    protected MavenProject project;
+
+
     protected final World world;
-    protected Subversion.SvnCredentials svnCredentials;
+    protected Scm scm;
 
     public Base() {
         this.world = World.createMinimal();
@@ -101,14 +105,15 @@ public abstract class Base extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException {
+        Scm.Credentials credentials;
         if (svnPassword == null && svnUser == null) {
-            svnCredentials = Subversion.SvnCredentials.NONE();
-        }
-        if ((svnUser == null && svnPassword != null) || (svnUser != null && svnPassword == null)) {
+            credentials = Scm.Credentials.NONE();
+        } else if (svnUser == null || svnPassword == null) {
             throw new MojoExecutionException("prerelease.svnusername and prerelease.svnpassword must be used in combination");
         } else  {
-            svnCredentials = new Subversion.SvnCredentials(svnUser, svnPassword);
+            credentials = new Scm.Credentials(svnUser, svnPassword);
         }
+        scm = Scm.create(project, credentials);
         getLog().debug("user-properties: " + session.getUserProperties());
         try {
             doExecute();

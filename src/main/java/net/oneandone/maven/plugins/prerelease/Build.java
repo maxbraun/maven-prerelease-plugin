@@ -15,16 +15,15 @@
  */
 package net.oneandone.maven.plugins.prerelease;
 
-import java.io.IOException;
-
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-
 import net.oneandone.maven.plugins.prerelease.core.Archive;
 import net.oneandone.maven.plugins.prerelease.core.Prerelease;
 import net.oneandone.maven.plugins.prerelease.core.WorkingCopy;
 import net.oneandone.maven.plugins.prerelease.util.FilteringMojoExecutor;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+
+import java.io.IOException;
 
 /**
  * Executes a build on an existing prerelease.
@@ -50,9 +49,9 @@ public class Build extends ProjectBase {
 
         if (buildRevision == null) {
             workingCopy = checkedWorkingCopy();
-            setTarget(archive.target(workingCopy.revision(), svnCredentials));
+            setTarget(archive.target(workingCopy.revision(), scm));
         } else {
-            setTarget(archive.target(revisionForDescriptor(archive), svnCredentials));
+            setTarget(archive.target(revisionForDescriptor(archive), scm));
         }
         prerelease = target.loadOpt();
         if (prerelease == null) {

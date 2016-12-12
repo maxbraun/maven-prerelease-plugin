@@ -17,20 +17,34 @@ package net.oneandone.maven.plugins.prerelease.core;
 
 import static org.junit.Assert.assertEquals;
 
+import net.oneandone.maven.plugins.prerelease.util.Scm;
 import org.apache.maven.project.MavenProject;
+import org.junit.Before;
 import org.junit.Test;
 
 import net.oneandone.maven.plugins.prerelease.util.IntegrationBase;
 import net.oneandone.maven.plugins.prerelease.util.Maven;
-import net.oneandone.maven.plugins.prerelease.util.Subversion;
 import net.oneandone.sushi.fs.file.FileNode;
 
 public class WorkingCopyIT extends IntegrationBase {
+    public static final MavenProject MAVEN_PROJECT = new MavenProject();
+
+    @Before
+    public void setUp() throws Exception {
+        org.apache.maven.model.Scm scm = new org.apache.maven.model.Scm();
+        scm.setConnection("scm:svn:h");
+        scm.setDeveloperConnection("scm:svn:h");
+        scm.setUrl("h");
+        MAVEN_PROJECT.setScm(scm);
+    }
+
     @Test
     public void noChanges() throws Exception {
         WorkingCopy workingCopy;
+        Scm scm;
 
-        workingCopy = WorkingCopy.load(checkoutProject("minimal"), Subversion.SvnCredentials.NONE());
+        scm = Scm.create(MAVEN_PROJECT, Scm.Credentials.NONE());
+        workingCopy = scm.createWorkingCopy(checkoutProject("minimal"));
         workingCopy.check();
     }
 
@@ -40,14 +54,16 @@ public class WorkingCopyIT extends IntegrationBase {
         FileNode mine;
         FileNode other;
         WorkingCopy workingCopy;
+        Scm scm;
 
+        scm = Scm.create(MAVEN_PROJECT, Scm.Credentials.NONE());
         mine = checkoutProject("minimal");
-        initialRevision = WorkingCopy.load(mine, Subversion.SvnCredentials.NONE()).revision();
+        initialRevision = scm.createWorkingCopy(mine).revision();
         other = checkoutProject("minimal", "other");
         append(other.join("pom.xml"), "<!-- bla -->");
         svnCommit(other, "other change");
 
-        workingCopy = WorkingCopy.load(mine, Subversion.SvnCredentials.NONE());
+        workingCopy = scm.createWorkingCopy(mine);
         workingCopy.check();
         assertEquals(initialRevision, workingCopy.revision());
     }
@@ -56,10 +72,12 @@ public class WorkingCopyIT extends IntegrationBase {
     public void localModification() throws Exception {
         FileNode dir;
         WorkingCopy workingCopy;
+        Scm scm;
 
+        scm = Scm.create(MAVEN_PROJECT, Scm.Credentials.NONE());
         dir = checkoutProject("minimal");
         append(dir.join("pom.xml"), "<!-- bla -->");
-        workingCopy = WorkingCopy.load(dir, Subversion.SvnCredentials.NONE());
+        workingCopy = scm.createWorkingCopy(dir);
         workingCopy.check();
     }
 
@@ -68,7 +86,9 @@ public class WorkingCopyIT extends IntegrationBase {
         FileNode mine;
         FileNode other;
         WorkingCopy workingCopy;
+        Scm scm;
 
+        scm = Scm.create(MAVEN_PROJECT, Scm.Credentials.NONE());
         mine = checkoutProject("minimal");
 
         other = checkoutProject("minimal", "other");
@@ -78,7 +98,7 @@ public class WorkingCopyIT extends IntegrationBase {
         append(mine.join("second.txt"), "\nbla");
         svnCommit(mine, "my change");
 
-        workingCopy = WorkingCopy.load(mine, Subversion.SvnCredentials.NONE());
+        workingCopy = scm.createWorkingCopy(mine);
         workingCopy.check();
     }
 
@@ -90,13 +110,15 @@ public class WorkingCopyIT extends IntegrationBase {
         MavenProject project;
         long revision;
         Descriptor descriptor;
+        Scm scm;
 
+        scm = Scm.create(MAVEN_PROJECT, Scm.Credentials.NONE());
         dir = checkoutProject("svnmismatch");
         maven = maven(WORLD);
         project = maven.loadPom(dir.join("pom.xml"));
-        revision = WorkingCopy.load(dir, Subversion.SvnCredentials.NONE()).revision();
-        descriptor = Descriptor.checkedCreate(WORLD, "foo", project, revision, false, true, Subversion.SvnCredentials.NONE());
-        WorkingCopy.load(dir, Subversion.SvnCredentials.NONE()).checkCompatibility(descriptor);
+        revision = scm.createWorkingCopy(dir).revision();
+        descriptor = Descriptor.checkedCreate(WORLD, "foo", project, revision, false, true, scm);
+        scm.createWorkingCopy(dir).checkCompatibility(descriptor);
     }
 
     @Test(expected = RevisionMismatch.class)
@@ -106,12 +128,14 @@ public class WorkingCopyIT extends IntegrationBase {
         MavenProject project;
         long revision;
         Descriptor descriptor;
+        Scm scm;
 
+        scm = Scm.create(MAVEN_PROJECT, Scm.Credentials.NONE());
         dir = checkoutProject("minimal");
         maven = maven(WORLD);
         project = maven.loadPom(dir.join("pom.xml"));
-        revision = WorkingCopy.load(dir, Subversion.SvnCredentials.NONE()).revision() + 1;
-        descriptor = Descriptor.checkedCreate(WORLD, "foo", project, revision, false, true, Subversion.SvnCredentials.NONE());
-        WorkingCopy.load(dir, Subversion.SvnCredentials.NONE()).checkCompatibility(descriptor);
+        revision = scm.createWorkingCopy(dir).revision() + 1;
+        descriptor = Descriptor.checkedCreate(WORLD, "foo", project, revision, false, true, scm);
+        scm.createWorkingCopy(dir).checkCompatibility(descriptor);
     }
 }
